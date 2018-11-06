@@ -47,7 +47,9 @@
         "funcHostingPlanName": "[concat(parameters('solutionName'), '-funct-plan')]",
         "funcStorageAccountType": "Standard_LRS",
         "funcSku": "Standard",
-        "funcWorkerSize": "0"
+        "funcWorkerSize": "0",
+        "dpsLocation": "[resourceGroup().location]",
+        "dpsName":"[concat(parameters('solutionName'),'dps')]"
     },
     "resources": [
         {
@@ -91,6 +93,13 @@
             }
         },
         {
+            "apiVersion": "2017-08-21-preview",
+            "type": "Microsoft.Devices/ProvisioningServices",
+            "name": "[variables('dpsName')]",
+            "location": "[variables('dpsLocation')]",
+            "properties": {}
+        },
+        {
             "apiVersion": "[variables('funcApiVersion')]",
             "type": "Microsoft.Web/sites",
             "name": "[variables('funcName')]",
@@ -120,30 +129,6 @@
                         {
                             "name": "AzureWebJobsDashboard",
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('funcStorageAccountName'),';AccountKey=',listkeys(resourceId('Microsoft.Storage/storageAccounts', variables('funcStorageAccountName')), '2015-05-01-preview').key1,';')]"
-                        },
-                        {
-                            "name": "papaySb",
-                            "value": "[listkeys(variables('sbRuleResourceId'), variables('sbVersion')).primaryConnectionString]"
-                        },
-                        {
-                            "name": "papayaDb",
-                            "value": "[concat('https://',parameters('solutionName'),'db','.documents.azure.com:443/')]"
-                        },
-                        {
-                            "name": "papapyaDbKey",
-                            "value": "[listkeys(variables('docDbName'), variables('docDbApiVersion')).primaryMasterKey]"
-                        },
-                        {
-                            "name": "papayaIotHost",
-                            "value": "[reference(variables('iotHubResourceId')).hostName]"
-                        },
-                        {
-                            "name": "papayaIotKeyName",
-                            "value": "[variables('iotHubKeyName')]"
-                        },
-                        {
-                            "name": "papayaIotKey",
-                            "value": "[listkeys(variables('iotHubKeyResource'), variables('iotHubVersion')).primaryKey]"
                         }
                     ]
                 }
