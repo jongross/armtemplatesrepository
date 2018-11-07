@@ -48,7 +48,7 @@
         "funcStorageAccountType": "Standard_LRS",
         "funcSku": "Standard",
         "funcWorkerSize": "0",
-        "dpsLocation": "[resourceGroup().location]",
+        "dpsLocation": "west us",
         "dpsName":"[concat(parameters('solutionName'),'dps')]"
     },
     "resources": [
